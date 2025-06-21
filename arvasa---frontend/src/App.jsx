@@ -40,6 +40,8 @@ import Favourites from "./components/profile/Favourites";
 import BackToTopButton from './components/Home/BackToTopButton';
 import { Error } from './pages/Error';
 
+import ForgotPassword from './components/Auth/ForgotPassword';
+
 function AppLayout() {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === '/otp' || location.pathname === '/signin' || location.pathname === '/signup' || location.pathname === '/chat'
@@ -108,6 +110,8 @@ function AppLayout() {
 
 
           <Route path="/otp" element={<Otp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
           <Route path="/chat" element={<ConversationPage />} />
           <Route path="/AddListing" element={<AddListings />} />
           <Route path="/subscription" element={<Subscription />} />

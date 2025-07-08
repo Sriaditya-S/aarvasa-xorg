@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp, MessageSquareText, FileText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const faqs = [
   {
@@ -50,16 +51,17 @@ const FAQItem = ({ faq, index, activeIndex, setActiveIndex }) => {
     </div>
   );
 };
-
 const FAQSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const navigate = useNavigate();
 
   return (
+    <div style={{ backgroundColor: '#8C2841' }} className="my-8 mx-2 mt-8 mb-8 md:mx-4 relative bg-rosewood max-w-[1840px] h-auto md:rounded-3xl flex flex-col justify-center items-center p-4 md:p-10">
     <div style={{ backgroundColor: '#8C2841' }} className="my-8 mx-2 mt-8 mb-8 md:mx-4 relative bg-rosewood max-w-[1840px] h-auto md:rounded-3xl flex flex-col justify-center items-center p-4 md:p-10">
 
       <div className="flex flex-wrap justify-between items-center w-[100%] md:w-[90%] mb-8">
         <h2 className="text-xl md:text-3xl font-semibold text-white">Frequently Asked Questions</h2>
-        <button className="px-4 mt-3 w-full md:w-auto py-2 text-black text-sm md:text-base font-semibold rounded-lg bg-gradient-to-r from-[#fbe174] to-[#d2a623] shadow-md">
+        <button className="px-4 mt-3 w-full md:w-auto py-2 text-black text-sm md:text-base font-semibold rounded-lg bg-gradient-to-r from-[#fbe174] to-[#d2a623] shadow-md" onClick={()=>navigate("/questions")}>
           Post your question here?
         </button>
       </div>
@@ -75,6 +77,7 @@ const FAQSection = () => {
           />
         ))}
       </div>
+    </div>
     </div>
   );
 };

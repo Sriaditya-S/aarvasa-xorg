@@ -55,6 +55,7 @@ import { useState } from 'react';
 import Terms from './pages/Terms';
 import Refund from './pages/Refund';
 import Security from './pages/Security';
+import Questions from './pages/Questions';
 
 function AppLayout() {
   const [popup, setPop] = useState(false);
@@ -120,7 +121,7 @@ function AppLayout() {
 
             <Route path="/article" element={<InsideArticle />} />
           </Route>
-
+          <Route path="/questions" element={<Questions />} />
           <Route path="*" element={<Error />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/termsandconditions" element={<Terms />} />

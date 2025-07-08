@@ -3,7 +3,9 @@ import { motion } from 'framer-motion'
 import { MapPin, Search, Home, IndianRupee, Earth, KeyRound, Map, BedDouble, Building2, UploadCloud } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { FilterContext } from '../../context/FilterProvider'
+import Select from 'react-select';
 import { Link } from 'react-router-dom'
+import Alert from '../Utils/Alert'
 import { toast } from 'react-toastify'
 const Landing = () => {
     const options = [{
@@ -55,7 +57,22 @@ const Landing = () => {
 
     }, [prevs])
 
+     const amount = [
+    { value: 500000, label: 'Up to ₹5L' },
+    { value: 1000000, label: 'Up to ₹10L' },
+    { value: 2000000, label: 'Up to ₹20L' },
+    { value: 5000000, label: 'Up to ₹50L' },
+    { value: 100000000, label: 'Up to ₹1Cr' }
+  ];
+
+    const propType = [
+        { value: 'Apartments', label: 'Apartments' },
+        { value: 'Villa', label: 'Villa' },
+    ]
+
     return (
+           <>
+
         <div className='overflow-x-hidden py-4 px-2 md:mx-8 overflow-hidden flex w-auto flex-wrap lg:flex-nowrap h-full items-center justify-center md:justify-between md:px-4 rounded-lg lg:h-[80vh]' style={{
             background: "linear-gradient(to right, #F9EAF1, #8C2841)",
         }} >
@@ -64,7 +81,7 @@ const Landing = () => {
                 <h1 className='text-[#692234] text-5xl lg:text-8xl font-bold mt-4 mb-8'>Manage your <br></br> property</h1>
                 <p className='text-[#692234] text-sm md:text-lg mt-4 mb-8'>You will have everything nearby supermarket, buses , station, the carmen neighborhood, etc</p>
                 <div className='bg-white w-auto mx-2 p-4 group hover:transform md:hover:scale-[1.03] transition-all flex flex-col rounded-lg z-[999] relative'>
-                    <div className="tags flex items-center gap-2 flex-wrap">
+                    <div className="tags flex items-center gap-3 flex-wrap">
                         {options.map((option, index) => (
                             <button
                                 key={index}
@@ -89,29 +106,85 @@ const Landing = () => {
                             </button></Link>
                     </div>
                     <hr className='mt-4 mb-4' />
-                    <div className="searches flex items-center gap-8 flex-wrap lg:flex-nowrap">
+                    <div className="searches space-y-4 md:space-y-0 flex items-center gap-2 flex-wrap lg:flex-nowrap">
                         <div className="search_bar w-full flex items-center gap-2 hover:text-[#8C2841]">
                             <MapPin></MapPin>
-                            <input type="text" value={filters.city} className='border-none w-full outline-none font-semibold' onChange={(e) => handleChange("city", e.target.value)} placeholder='Enter city, locality, project' />
+                            <input type="text" value={filters.city} className='border p-2 rounded-lg w-full outline-none font-semibold' onChange={(e) => handleChange("city", e.target.value)} placeholder='Enter city, locality, project' />
                         </div>
-                        <div className="property w-full flex items-center hover:text-[#8C2841]">
+                        <div className="property w-full gap-2 flex items-center hover:text-[#8C2841]">
                             <Earth />
-                            <select name="" value={filters.propertyType} onChange={(e) => handleChange("propertyType", e.target.value)} id="" className='px-4 bg-white  w-full md:w-auto font-semibold '>
-                                <option value="Property type">Apartments</option>
-                            </select>
+                            <Select
+                                options={propType}
+                                value={propType.find(opt => opt.value === filters.propertyType)}
+                                onChange={(selectedOption) => handleChange("propertyType", selectedOption.value)}
+                                className="w-full text-sm font-semibold"
+                                  menuPortalTarget={document.body} 
+                                styles={{
+                                     menuPortal: base => ({ ...base, zIndex: 9999 }),
+                                    option: (provided, state) => ({
+                                        ...provided,
+                                        padding: 18,
+                                        backgroundColor: state.isSelected ? '#8C2841' : state.isFocused ? '#F3E6EA' : 'white',
+                                        color: state.isSelected ? 'white' : '#333',
+                                        cursor: 'pointer',
+                                     
+                                    }),
+                                    control: (provided) => ({
+                                        ...provided,
+                                        borderColor: '#ccc',
+                                        boxShadow: 'none',
+                                        '&:hover': { borderColor: '#8C2841' },
+                                        padding: '2px',
+                                    }),
+                                    singleValue: (provided) => ({
+                                        ...provided,
+                                        color: '#333',
+                                    }),
+                                    menu: (provided) => ({
+                                        ...provided,
+                                        zIndex: 9999,
+                                    }),
+                                }}
+                            />
+
                         </div>
                         <div className="budget w-full flex items-center gap-2 hover:text-[#8C2841]">
                             <IndianRupee></IndianRupee>
-                            <select name="budget" value={filters.budget} id="" onChange={(e) => handleChange("budget", e.target.value)} className='px-4 bg-white w-full font-semibold'>
-                                <option value="">Budget</option>
-                                <option value="500000">Up to ₹5L</option>
-                                <option value="1000000">Up to ₹10L</option>
-                                <option value="2000000">Up to ₹20L</option>
-                                <option value="5000000">Up to ₹50L</option>
-                                <option value="10000000">Up to ₹1Cr</option>
-                            </select>
+                            <Select
+                                options={amount}
+                                value={amount.find(v => v.value === filters.budget) || null}
+                                onChange={(e) => handleChange("budget", e.value)}
+                                className="w-full z-[999999] relative text-sm"
+                                menuPortalTarget={document.body}
+                                styles={{
+                                    menuPortal: base => ({ ...base, zIndex: 9999 }),
+                                    option: (provided, state) => ({
+                                        ...provided,
+                                        padding: 12,
+                                        color: state.isSelected ? 'white' : '#333', // ✅ visible text
+                                        backgroundColor: state.isSelected ? '#8C2841' : 'white',
+                                        ':hover': {
+                                            backgroundColor: '#F9EAF1',
+                                            color: '#8C2841',
+                                        },
+                                    }),
+                                    control: (base, state) => ({
+                                        ...base,
+                                        borderColor: '#8C2841',
+                                        boxShadow: state.isFocused ? '0 0 0 1px #8C2841' : base.boxShadow,
+                                        '&:hover': {
+                                            borderColor: '#8C2841',
+                                        },
+                                    }),
+                                    singleValue: (provided) => ({
+                                        ...provided,
+                                        color: '#8C2841',
+                                    }),
+                                }}
+                            />
+
                         </div>
-                        <button onClick={handleFilter} className='flex w-full items-center justify-center gap-3 p-2 px-4 bg-gradient-to-r from-[#F7A240] to-[#F5C01A] group-hover:transition-all group-hover:transition-delay-[7s]  group-hover:from-[#FFFDF3] font-bold group-hover:text-white group-hover:bg-[#8C2841] rounded-lg' >
+                        <button onClick={handleFilter} className='flex w-full md:w-fit items-center justify-center gap-3 p-2 px-4 bg-gradient-to-r from-[#F7A240] to-[#F5C01A] group-hover:transition-all group-hover:transition-delay-[7s]  group-hover:from-[#FFFDF3] font-bold group-hover:text-white group-hover:bg-[#8C2841] rounded-lg' >
                             <Search />
                             Search
                         </button>
@@ -133,6 +206,8 @@ const Landing = () => {
                     src="/images/hero.png" className='w-full md:hover:transform hover:scale-[1.1] transition-all relative z-[999]' alt="" />
             </div>
         </div>
+    
+           </>
     )
 }
 

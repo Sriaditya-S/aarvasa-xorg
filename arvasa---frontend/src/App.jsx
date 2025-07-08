@@ -27,6 +27,7 @@ import Guides from './components/profile/Guides';
 import Transactions from './pages/Transactions';
 import FilterPage from './components/Chatbot/FilterPage';
 import Tools from './pages/Tools';
+import Alert from './components/Utils/Alert';
 import Budget from './components/tools/Budget';
 import Emi from './components/tools/Emi';
 import Loan from './components/tools/Loan';
@@ -54,6 +55,7 @@ import { useState } from 'react';
 import Terms from './pages/Terms';
 import Refund from './pages/Refund';
 import Security from './pages/Security';
+import Questions from './pages/Questions';
 
 function AppLayout() {
   const [popup, setPop] = useState(false);
@@ -66,6 +68,7 @@ function AppLayout() {
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
+  
         {!hideNavAndFooter && <Navbar />}
 
         <Routes>
@@ -108,7 +111,6 @@ function AppLayout() {
 
             <Route path="/chat" element={<Ai />} />
             <Route path="/AddListing" element={<AddListings />} />
-            <Route path="/subscription" element={<Subscription />} />
 
             <Route path="/tools" element={<Tools />}>
               <Route path="budgetcalculator" element={<Budget />} />
@@ -119,7 +121,7 @@ function AppLayout() {
 
             <Route path="/article" element={<InsideArticle />} />
           </Route>
-
+          <Route path="/questions" element={<Questions />} />
           <Route path="*" element={<Error />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/termsandconditions" element={<Terms />} />
@@ -128,6 +130,8 @@ function AppLayout() {
 
 
           {/* Fallback */}
+            <Route path="/subscription" element={<Subscription />} />
+
         </Routes>
       </main>
 

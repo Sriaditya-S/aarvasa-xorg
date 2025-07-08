@@ -1,24 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Prev } from '../components/icons/Prev';
 import { Next } from '../components/icons/Next';
 import { Download } from '../components/icons/Download';
+import axios from 'axios';
 
 const Transactions = () => {
-  const allTransactions = [
-    { date: '15 June, 205', location: 'xxx', type: 'APARTMENT', price: '₹ 1.2 khs', area: '4,000' },
-    { date: '15 June, 205', location: 'xxx', type: 'VILLA', price: '₹ 62', area: '120' },
-    { date: '15 June, 2025', location: 'xxx', type: 'APARTMENT', price: '₹ 621 kh', area: '1,800' },
-    { date: '05 June, 2025', location: 'xxx', type: 'VILLA', price: '₹ 900', area: '4,000' },
-    { date: '01 June, 2025', location: 'xxx', type: 'APARTMENT', price: '₹ 1.5 khs', area: '3,500' },
-    { date: '01 May, 2025', location: 'xxx', type: 'VILLA', price: '₹ 800', area: '2,000' },
-    { date: '15 April, 2025', location: 'xxx', type: 'APARTMENT', price: '₹ 700 kh', area: '1,500' },
-    { date: '10 April, 2025', location: 'xxx', type: 'VILLA', price: '₹ 1.1 khs', area: '4,500' },
-    { date: '05 April, 2025', location: 'xxx', type: 'APARTMENT', price: '₹ 950', area: '2,800' },
-    { date: '01 April, 2025', location: 'xxx', type: 'VILLA', price: '₹ 600', area: '3,000' },
-  ];
+  const [allTransactions, setAllTransactions] = useState([]);
 
   const entriesPerPage = 4;
-  const totalPages = Math.ceil(allTransactions.length / entriesPerPage); 
+  const totalPages = Math.ceil(allTransactions.length / entriesPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
   const startIndex = (currentPage - 1) * entriesPerPage;
@@ -31,6 +21,27 @@ const Transactions = () => {
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
+
+  const fetchTransactions = async (req, res) => {
+    const token = localStorage.getItem("accessToken");
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/transactions`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      
+    });
+    if(response.data.status){
+      setAllTransactions(response.data.transactions);
+    }
+  }
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [])
+
+  useEffect(() => {
+    console.log(allTransactions);
+  }, [allTransactions])
 
   return (
     <div className="p-4 max-w-7xl mx-auto bg-white rounded-3xl shadow-lg pb-[20px] border-4 border-gray-200 mt-4">
@@ -47,8 +58,8 @@ const Transactions = () => {
       <div className="bg-[#FFFCF2] rounded-3xl shadow-lg p-10 mx-10 -mt-4">
 
         <div className="text-lg mb-4 flex">
-        	<span className="mr-2 text-3xl text-gray-500">⟳</span>
-					<h2 className="text-xl mt-1.5">Transactions</h2>
+          <span className="mr-2 text-3xl text-gray-500">⟳</span>
+          <h2 className="text-xl mt-1.5">Transactions</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -63,48 +74,48 @@ const Transactions = () => {
               </tr>
             </thead>
             <tbody>
-              {currentTransactions.map((transaction, index) => (
-                <tr key={index} className="border-b hover:bg-yellow-100">
-                  <td className="p-2 ">{transaction.date}</td>
-                  <td className="p-2">{transaction.location}</td>
-                  <td className="p-2">{transaction.type}</td>
-                  <td className="p-2">{transaction.price}</td>
-                  <td className="p-2">{transaction.area}</td>
-                  <td className="p-1">
-                    <Download color="text-gray-300 hover:text-gray-600" />
-                  </td>
-                </tr>
-              ))}
+              {allTransactions.length === 0 ? null :
+                currentTransactions.map((transaction, index) => (
+                  <tr key={index} className="border-b hover:bg-yellow-100">
+                    <td className="p-2 ">{transaction.date}</td>
+                    <td className="p-2">{transaction.location}</td>
+                    <td className="p-2">{transaction.type}</td>
+                    <td className="p-2">{transaction.price}</td>
+                    <td className="p-2">{transaction.area}</td>
+                    <td className="p-1">
+                      <Download color="text-gray-300 hover:text-gray-600" />
+                    </td>
+                  </tr>
+                ))
+              }
             </tbody>
           </table>
         </div>
 
-        <div className="flex justify-between items-center mt-4">
+        {allTransactions.length > 0 ? <div className="flex justify-between items-center mt-4">
           <span className="text-gray-600">Page {currentPage} of {totalPages}</span>
           <div className="flex gap-2">
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 1}
-              className={`${
-                currentPage === 1 ? 'text-gray-400 flex items-center cursor-not-allowed' : 'text-gray-600 flex items-center hover:underline'
-              }`}
+              className={`${currentPage === 1 ? 'text-gray-400 flex items-center cursor-not-allowed' : 'text-gray-600 flex items-center hover:underline'
+                }`}
             >
-			<Prev color={`${currentPage === 1 ? 'text-gray-400' : 'text-gray-600'}`} />
-            Prev
+              <Prev color={`${currentPage === 1 ? 'text-gray-400' : 'text-gray-600'}`} />
+              Prev
             </button>
-			    <div>|</div>
+            <div>|</div>
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-              className={`${
-                currentPage === totalPages ? 'text-gray-400 flex items-center cursor-not-allowed' : 'text-gray-600 flex items-center hover:underline'
-              }`}
+              className={`${currentPage === totalPages ? 'text-gray-400 flex items-center cursor-not-allowed' : 'text-gray-600 flex items-center hover:underline'
+                }`}
             >
-            Next
-			<Next color={`${currentPage === totalPages ? 'text-gray-400' : 'text-gray-600'}`} />
+              Next
+              <Next color={`${currentPage === totalPages ? 'text-gray-400' : 'text-gray-600'}`} />
             </button>
           </div>
-        </div>
+        </div> : <h1 className='text-4xl text-center mt-8'>No transactions yet</h1>}
       </div>
     </div>
   );

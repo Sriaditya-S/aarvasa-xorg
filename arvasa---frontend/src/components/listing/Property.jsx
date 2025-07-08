@@ -1,11 +1,13 @@
 // components/listing/Property.jsx
 import React from 'react';
-import { FaHeart, FaChevronLeft, FaChevronRight, FaMapMarkerAlt, FaBed, FaBath, FaRuler } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaMapMarkerAlt, FaBed, FaBath, FaRuler } from 'react-icons/fa';
 import { MdEmail, MdPhone } from 'react-icons/md';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const Property = ({ listing }) => {
+
+const Property = ({ listing, favourites, handleLiking }) => {
     const {
         _id,
         propertyTitle,
@@ -20,6 +22,9 @@ const Property = ({ listing }) => {
         shortDescription
     } = listing;
 
+
+
+
     return (
         <div className="w-full h-auto bg-white rounded-xl shadow-md flex flex-col gap-6 lg:gap-2 lg:flex-row p-4">
             <div className="relative w-full lg:w-[500px] h-[250px] lg:h-[269px] rounded-lg overflow-hidden mb-4 lg:mb-0">
@@ -30,8 +35,15 @@ const Property = ({ listing }) => {
                         className="h-full p-1 w-full border border-gray-300 rounded-lg object-contain"
                     />
                 </Link>
-                <button className="absolute top-4 right-4 p-2 bg-white/30 rounded-full">
-                    <FaHeart className="text-black/30" />
+                <button
+                    onClick={() => handleLiking(_id)} 
+                    className="absolute top-4 right-4 p-2 bg-white/30 rounded-full"
+                >
+                    {favourites.includes(_id?.toString()) ? (
+                        <FaHeart className="text-red-500" />
+                    ) : (
+                        <FaRegHeart className="text-black/30" />
+                    )}
                 </button>
                 <button className="absolute top-1/2 left-2 -translate-y-1/2 w-6 h-6 bg-[#FAF9F6] rounded-full flex items-center justify-center">
                     <FaChevronLeft className="text-black" />
@@ -41,9 +53,9 @@ const Property = ({ listing }) => {
                 </button>
                 <a target='_blank' rel="noopener noreferrer" href={`https://www.google.com/maps?q=${coordinates.lat},${coordinates.lng}`}>
                     <button className="absolute bottom-1 left-[10px] px-4 py-2 bg-black/50 rounded text-white flex items-center gap-2">
-                    <FaMapMarkerAlt />
-                    View on Map
-                </button>
+                        <FaMapMarkerAlt />
+                        View on Map
+                    </button>
                 </a>
             </div>
 

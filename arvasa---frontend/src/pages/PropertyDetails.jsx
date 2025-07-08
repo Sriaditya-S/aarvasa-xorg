@@ -19,9 +19,15 @@ const PropertyDetails = () => {
     const getData = async () => {
       try {
         setLoader(true);
-        console.log(import.meta.env.VITE_BACKEND_URL + " from details ");
+        const token = localStorage.getItem("accessToken");
         const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/listings/${id}`);
-        console.log(res.data);
+
+        // marking property to recntly viewed
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/listings/postrecent`, {propertyId:id}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
         setData(res.data.data); 
       } catch (err) {
         console.error("Error fetching property:", err);

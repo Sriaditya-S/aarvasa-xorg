@@ -8,8 +8,12 @@ const PrivateRoute = () => {
   const {user, fetchUser, loading } = useContext(AuthContext);
   const [authenticated, setAuthenticated] = useState(false);
 
+  useEffect(() => {
+    fetchUser();
+  }, [])
+
   if(loading){
-    return <h1>Loading</h1>
+    return <h1>Loading...</h1>
   }
    return user ? <Outlet /> : <Navigate to="/signin" />;
 

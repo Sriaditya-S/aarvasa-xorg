@@ -53,7 +53,7 @@ export default function SignIn() {
             }
         } catch (err) {
             console.error("Login error:", err);
-            alert(err.response?.data?.message || "Login failed.");
+            alert(err.response?.data?.message);
         }
         finally {
             setLoader(false);
@@ -86,13 +86,9 @@ export default function SignIn() {
         }
     };
 
-    useEffect(() => {
-        console.log("Rendered");
-    }, [])
     return (
         <>
             {loader ? <Loaders /> : null}
-
             <motion.div
                 className="bg-[#ffffff] justify-center items-center">
                 {/* Main Content Container (Flex to hold left and right sections) */}

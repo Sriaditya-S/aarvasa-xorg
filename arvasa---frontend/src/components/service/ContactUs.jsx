@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Heading } from '../Utils/Heading'
 import Loaders from '../Loaders';
+import { useRef } from 'react';
 
-const ContactUs = () => {
+const ContactUs = ({ref}) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -49,7 +50,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="mx-2 mt-8 mb-8">
+    <div className="mx-2 mt-8 mb-8" ref={ref}>
       {loader ? <Loaders/> : null}
       <Heading label="Contact Us" />
       <div className="flex md:px-28 items-center flex-wrap lg:flex-nowrap relative justify-center lg:justify-between w-full h-auto md:p-8 bg-gradient-to-b from-[#C9B391] to-[#A79475] rounded-2xl p-2 lg:gap-10">

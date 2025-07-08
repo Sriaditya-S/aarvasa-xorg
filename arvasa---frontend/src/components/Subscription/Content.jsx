@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loaders from "../Loaders";
+import AuthContext from "../../context/AuthContext";
 const Content = () => {
     const [type, setType] = useState("owner");
     const [selectedPlan, setSelectedPlan] = useState(null);
     const [email, setEmail] = useState(null);
     const [loader, setLoader] = useState(false);
     const navigate = useNavigate();
+    const {user, setUser} = useContext(AuthContext);
 
     useEffect(() => {
         setEmail(localStorage.getItem("userEmail"));
@@ -177,15 +179,17 @@ const Content = () => {
 
 
    const handlePay = async (e, planKey) => {
-    if(!localStorage.getItem("userEmail")){
-        navigate("/signin")
-    }
+ 
     try {
+        const token = localStorage.getItem("accessToken");
         setLoader(true);
         // 1. Call backend to create Razorpay order
         const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`, {
-            amount: e.target.value // ₹10
-        });
+            amount: e.target.value // ₹10,
+            
+        },{  headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,});
+        console.log(res.data);
 
         const { orderId, amount, currency } = res.data;
 
@@ -213,7 +217,10 @@ const Content = () => {
         const rzp = new window.Razorpay(options);
         rzp.open();
     } catch (err) {
-        console.error("❌ Payment Failed:", err);
+        if(err.response.status === 401){
+            setUser(null);
+            navigate("/signin");
+        }
     }
     finally{
         setLoader(false);

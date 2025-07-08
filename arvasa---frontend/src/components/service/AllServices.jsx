@@ -49,11 +49,11 @@ const services = [
   },
 ];
 
-const AllServices = () => {
+const AllServices = ({ref}) => {
   const viewedIndexes = useRef(new Set());
 
   return (
-    <section className="px-2 py-10 mx- md:mx-8 font-[poppins] overflow-x-hidden">
+    <section ref={ref} className="px-2 py-10 mx- md:mx-8 font-[poppins] overflow-x-hidden">
       <Heading label="Your Real Estate Guide" />
       <h2 className="font-semibold text-left text-md text-gray-600 mb-10 md:text-xl">
         Aarvasa Simplifies Real Estate with Seamless Transactions, Investments, and

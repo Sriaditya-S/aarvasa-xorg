@@ -17,33 +17,39 @@ const MainProfile = () => {
     fetchUser();
   }, [])
 
+
+
   const today = new Date();
   // Format as "Friday, 31 Mar 2025"
   const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
   const formattedDate = today.toLocaleDateString('en-IN', options);
   return (
     <>
-      <div className=' h-auto lg:h-[100vh] flex-col flex'>
+      {user ? <div className=' h-auto lg:h-[100vh] flex-col flex'>
 
         <div className='w-[85%] mx-auto'>
 
-          <h1 className='text-2xl font-semibold mt-8'>Welcome , {user.name}</h1>
+          <h1 className='text-2xl font-semibold mt-8'>Welcome , {user.email}</h1>
           <p className='mt-2'>{formattedDate} </p>
         </div>
         <div className='w-[85%] h-[70%] pb-8 mt-4 mx-auto h-full bg-white border border-2 rounded-lg transition-all hover:border-[#8C2841]'>
           <div className="text_content gap-8 md:gap-0 flex items-center justify-between flex-wrap px-12 py-4">
             <div className="left_section flex flex-wrap justify-center md:justify-start items-center gap-4">
               <div className="profile">
-                <img
-                  src={user?.photo || "/images/profile.png"}
+               {user.photo ?  <img
+                  src={user.photo 
+                  }
                   alt="Profile"
-                  className="w-16 h-16 rounded-full object-cover"
-                />
+                  className="w-8 h-8 md:w-16 md:h-16 rounded-full object-cover"
+                /> :
+                 <div className="w-12 h-12 rounded-full bg-[#8C2841] text-white flex items-center justify-center text-xl font-bold">
+                    {user.email.charAt(0).toUpperCase()}
+                  </div> }
 
               </div>
               <div className="text text-center md:text-start">
                 <p>{user.email}</p>
-                <p className='text-sm mt-2 sm:mt-1'>{user.is_subscribed ? user.plan + "Plan" : "Currently you have no plan ."}</p>
+                <p className='text-sm mt-2 sm:mt-2 text-xl font-semibold'>Subscribtion type : {user.is_subscribed ? user.subscription_type + " Plan" : "Currently you have no plan ."}</p>
               </div>
             </div>
             <button className='w-full md:w-auto border border-4 border-[#8C2841] hover:bg-[#8C2841] hover:border-[#F7A240] shadow-xl hover:transform hover:scale-[1.1] hover:rotate-[5deg] hover:text-white transition-all px-8 p-1'>Edit</button>
@@ -105,7 +111,7 @@ const MainProfile = () => {
           </div>
 
         </div>
-      </div>
+      </div> : null}
 
     </>
   )

@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import AuthContext from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
 import { useContext } from "react";
-
+import Alert from "./Utils/Alert";
 const Navbar = () => {
     const [data] = useState([
         { route: "Home", path: "" },
@@ -16,16 +17,17 @@ const Navbar = () => {
 
     const [logged_in, setLoggedin] = useState(false);
     const [fixed, setFixed] = useState(false);
+    const [alert, setAlert] = useState(null);
     const [navHeight, setNavHeight] = useState(0);
     const ref = useRef(null);
     const menu = useRef(null);
     const [MenuOpen, setMenuOpen] = useState(false);
     const { user, setUser, fetchUser } = useContext(AuthContext);
     const navigate = useNavigate();
+    const location = useLocation();
 
     // Detect scroll to fix navbar
     useEffect(() => {
-        fetchUser();
         const handleScroll = () => {
             if (!ref.current) return;
             const scrollTop = window.scrollY;
@@ -52,7 +54,6 @@ const Navbar = () => {
     }, []);
 
 
-
     // Detect token to set login status
 
 
@@ -68,8 +69,11 @@ const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
-        toast.info("You were successfully logged out of your account");
-        fetchUser();
+        setAlert({
+            message : "You were logged out !",
+            color : "blue"
+        })
+        setUser(null);
         navigate("/")
     };
 
@@ -77,6 +81,7 @@ const Navbar = () => {
     return (
         <>
             <nav
+        
                 ref={ref}
                 className={`relative-nav transition-all duration-300 ease-in-out z-[99999] px-2 md:px-0 lg:px-2 py-4 ${fixed ? 'bg-orange-50' : 'bg-transparent'}`}
             >
@@ -127,11 +132,15 @@ const Navbar = () => {
                         {user ? (
                             <div className="flex items-center gap-3">
                                 <Link to="/profile">
-                                    <img
-                                        src={user?.photo || "/images/profile.png"}
-                                        className="w-10 h-10 rounded-full object-cover"
-                                        alt="profile"
-                                    />
+                                    {user.photo ? <img
+                                        src={user.photo
+                                        }
+                                        alt="Profile"
+                                        className="w-8 h-8 md:w-12 md:h-12 rounded-full object-cover"
+                                    /> :
+                                        <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-[#8C2841] text-white flex items-center justify-center text-xl font-bold">
+                                            {user.email.charAt(0).toUpperCase()}
+                                        </div>}
 
                                 </Link>
                                 <button
@@ -164,6 +173,8 @@ const Navbar = () => {
                     </div>
                 </div>
             </nav>
+
+            {alert ? <Alert message={alert.message} color={alert.color}></Alert> : null}
 
             {/* Spacer for fixed navbar */}
             {fixed && <div style={{ height: `${navHeight}px` }} />}

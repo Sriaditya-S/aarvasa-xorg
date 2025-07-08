@@ -47,7 +47,7 @@ const ConversationPage = () => {
         controllerRef.current = new AbortController();
 
         try {
-            const res = await fetch('http://localhost:8000/stream_chat', {
+            const res = await fetch(`${import.meta.env.VITE_CHATBOT_URL}/stream_chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -5,6 +5,8 @@ import Services from './pages/Services';
 import Ai from './pages/Ai';
 import About from './pages/About';
 import Navbar from './components/Navbar';
+// import Navbar from '@/dark/components/Navbar.jsx';
+
 import Listing from './pages/Listing';
 import Property from './components/listing/Property';
 import Graphs from './components/listing/Graphs';
@@ -56,6 +58,9 @@ import Terms from './pages/Terms';
 import Refund from './pages/Refund';
 import Security from './pages/Security';
 import Questions from './pages/Questions';
+
+import ServicesD from './dark/pages/ServicesD'; 
+import HomeD from './dark/pages/HomeD';
 
 function AppLayout() {
   const [popup, setPop] = useState(false);
@@ -131,6 +136,11 @@ function AppLayout() {
 
           {/* Fallback */}
             <Route path="/subscription" element={<Subscription />} />
+          
+
+          {/*Dark*/}
+          <Route path="/servicespremium" element={<ServicesD />} />
+          <Route path="/homepremium" element={<HomeD />} />
 
         </Routes>
       </main>

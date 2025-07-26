@@ -7,7 +7,7 @@ import Page from "../../components/listing/Page";
 import Slider from "../../components/About/Slider";
 import { useRef } from "react";
 
-const Services = () => {
+const ServicesD = () => {
     const contactRef = useRef(null);
     const serviceRef = useRef(null);
 
@@ -34,4 +34,4 @@ const Services = () => {
     );
 };
 
-export default Services;
+export default ServicesD;

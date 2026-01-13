@@ -6,6 +6,17 @@
 Aarvasa is a PropTech real estate platform built to revolutionize the way people **buy, sell, lease, and invest in properties online**. This repository contains the full **source code** of the website deployed at [aarvasa.com](https://aarvasa.com).
 
 ---
+## 🏗️ System Architecture
+
+Click the diagram below to explore the **backend API repository**:
+
+[![Aarvasa Architecture](./docs/architecture.png)](https://github.com/Sriaditya-S/aarvasa-systemd)
+
+This project consists of:
+
+- **Frontend (This Repo):** UI & user experience  
+- **Backend API (Server):** Logic, authentication, database, APIs  
+---
 
 ## About the Project
 
